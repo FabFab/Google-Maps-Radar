@@ -93,7 +93,7 @@ GoogleRadar.prototype.addRadarLine = function(opts) {
 
 		this.radarLine.id = (opts && opts.id) || "RadarBar";
 		this.radarLine.radius = (opts && opts.radius) || 0.5; //km
-		this.radarLine.time = (opts && opts.time) || 2;
+		this.radarLine.time = (opts && opts.time) || 100;
 		this.radarLine.angle = (opts && opts.angle) || 0;
 		this.radarLine.angleOrigin = (opts && opts.angle) || 0;
 		this.radarLine.angleIncrease = (opts && opts.angleIncrease) || 5;
@@ -177,7 +177,7 @@ GoogleRadar.prototype.addRadarPolygon = function(opts) {
 		this.radarPolygon = {};
 		this.radarPolygon.id = (opts && opts.id) || "RadarBarPolygon";
 		this.radarPolygon.radius = (opts && opts.radius) || 1;//km
-		this.radarPolygon.time = (opts && opts.time) || 2;
+		this.radarPolygon.time = (opts && opts.time) || 100;
 		this.radarPolygon.angle = (opts && opts.angle) || 0;
 		this.radarPolygon.angleOrigin = (opts && opts.angle) || 0;
 		this.radarPolygon.angleIncrease = (opts && opts.angleIncrease) || 5;

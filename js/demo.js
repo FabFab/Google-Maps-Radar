@@ -1,9 +1,9 @@
-oPicto = {
+			var oPicto = {
 				latitude : 35.659530,
 				longitude : 139.700512
 			};
 
-			function initGoogleMap() {
+			function initGoogleMaps() {
 				var mapOptions = {
 					zoom : 15,
 					center : new google.maps.LatLng(oPicto.latitude, oPicto.longitude),
@@ -96,7 +96,7 @@ oPicto = {
 				if( typeof (myGoogleRadar) != 'undefined') {
 					opts = {
 						angle : 5,
-						time : 100
+						time : 50
 					};
 					myGoogleRadar.addRadarPolygon(opts);
 				}
@@ -285,20 +285,20 @@ oPicto = {
 					mapTypeId : google.maps.MapTypeId.SATELLITE
 				};
 				map2 = new google.maps.Map(document.getElementById("map2"), mapOptions2);
-				var opt2 = {
+				var radarOptions2 = {
 					lat : 26.184456, 
 					lng : -70.234968,
 					id: "bermudaRadar"
 				}
-				myBermudaStuff = new GoogleRadar(map2, opt2);
+				myBermudaStuff = new GoogleRadar(map2, radarOptions2);
 				var bermudaTriangle= [new google.maps.LatLng(25.774252, -80.190262), new google.maps.LatLng(18.466465, -66.118292), new google.maps.LatLng(32.321384, -64.75737), new google.maps.LatLng(25.774252, -80.190262)];
 
-				var opt3 = {
+				var shapeOptions2 = {
 						time : 100,
 						zIndex : 5,
 						shapeCoords: bermudaTriangle,
 						id: "bermuda"
 				};
-				myBermudaStuff.addRadarPolygon(opt3);
+				myBermudaStuff.addRadarPolygon(shapeOptions2);
 
 			};
