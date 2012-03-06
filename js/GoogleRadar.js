@@ -48,9 +48,9 @@ GoogleRadar.prototype.setCenter = function(lat,lng) {
  */
 GoogleRadar.prototype.drawAxis = function(opts) {
 	
-	if(typeof (this.axis) == 'undefined') {
+	if(typeof (this.axis) == "undefined") {
 		this.axis = {};
-		this.axis.radius = opts.radius || 1000; //m
+		this.axis.radius = (opts && opts.radius) || 1000; //m
 		this.axis.n = (opts && opts.n) || 10;
 	}
 		
@@ -90,7 +90,7 @@ GoogleRadar.prototype.undrawAxis = function() {
  */
 GoogleRadar.prototype.addRadarLine = function(opts) {
 	
-	if( typeof (this.radarLine) == 'undefined') {
+	if( typeof (this.radarLine) == "undefined") {
 		this.radarLine = {};
 
 		this.radarLine.id = (opts && opts.id) || "line_" + Math.random();
@@ -154,7 +154,7 @@ GoogleRadar.prototype.rotateLine = function() {
 	}
 
 	// Count the laps.
-	this.lapsAndLoops(this.radarLine, 'rotateLine');
+	this.lapsAndLoops(this.radarLine, "rotateLine");
 
 }
 
@@ -175,7 +175,7 @@ GoogleRadar.prototype.showLine = function() {
  * Polygon
  */
 GoogleRadar.prototype.addRadarPolygon = function(opts) {
-	if( typeof (this.radarPolygon) == 'undefined') {
+	if( typeof (this.radarPolygon) == "undefined") {
 		this.radarPolygon = {};
 		this.radarPolygon.id = (opts && opts.id) || "polygon_" + Math.random();
 		this.radarPolygon.radius = (opts && opts.radius) || 1;//km
@@ -241,10 +241,10 @@ GoogleRadar.prototype.rotateInArray = function() {
 	this.detectMarkers(this.radarPolygon);
 
 	// Count the laps.
-	this.lapsAndLoops(this.radarPolygon, 'rotateInArray');
+	this.lapsAndLoops(this.radarPolygon, "rotateInArray");
 }
 
-GoogleRadar.prototype.stopRotatePolygon = function() {
+GoogleRadar.prototype.stopPolygon = function() {
 	window.clearTimeout(this.radarPolygon.callback);
 	this.radarPolygon.callback = null;
 }
@@ -265,7 +265,7 @@ GoogleRadar.prototype.lapsAndLoops = function(radar, funcName) {
 	{
 		radar.angle = (radar.angle + radar.angleIncrease) % 360;
 		
-		if(typeof(GoogleRadar.aRadars) == 'object')
+		if(typeof(GoogleRadar.aRadars) == "object")
 		{
 			//mmmh, let's see...
 		}
@@ -310,25 +310,25 @@ GoogleRadar.prototype.detectMarkers = function (radar){
 	}
 }
 
-GoogleRadar.prototype.addMarker = function(aMarker) {
+GoogleRadar.prototype.addMarker = function(marker) {
 
-	if(aMarker.lat == null || aMarker.lng == null || aMarker.id == null || aMarker.iconUrl == null)
+	if(marker.lat == null || marker.lng == null || marker.id == null || marker.iconUrl == null)
 		return false;
 
 	if( typeof (this.aMarkers) === "undefined")
 		return false;
 
-	var marker = new google.maps.Marker({
+	var gMarker = new google.maps.Marker({
 		map : this.map,
 		draggable : false,
-		position : new google.maps.LatLng(aMarker.lat, aMarker.lng),
-		icon : aMarker.iconUrl || null,
-		handle : aMarker.handle || null,
-		id : aMarker.id,
-		visible : (aMarker.visible == null) && true
+		position : new google.maps.LatLng(marker.lat, marker.lng),
+		icon : marker.iconUrl || null,
+		handle : marker.handle || null,
+		id : marker.id,
+		visible : (marker.visible == null) && true
 	});
 
-	this.aMarkers.push(marker);
+	this.aMarkers.push(gMarker);
 }
 
 GoogleRadar.prototype.removeMarker = function(marker) {
@@ -378,8 +378,7 @@ if( typeof (Number.prototype.toDeg) === "undefined") {
  */
 
 GoogleRadar.prototype.distanceFrom = function(LatLng1, LatLng2) {
-	var R = this.EarthRadius;
-	// km
+	var R = this.EarthRadius; // km
 	var dLat = (LatLng2.lat() - LatLng1.lat()).toRad();
 	var dLon = (LatLng2.lng() - LatLng1.lng()).toRad();
 	var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(LatLng1.lat().toRad()) * Math.cos(LatLng2.lat().toRad()) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -390,13 +389,12 @@ GoogleRadar.prototype.distanceFrom = function(LatLng1, LatLng2) {
 
 // Huge thanks to http://www.movable-type.co.uk/scripts/latlong.html
 GoogleRadar.prototype.destinationPoint = function(initLatLon, dist, brng) {
-	dist = typeof (dist) == 'number' ? dist : typeof (dist) == 'string' && dist.trim() != '' ? +dist : NaN;
+	dist = typeof (dist) == "number" ? dist : typeof (dist) == "string" && dist.trim() != "" ? +dist : NaN;
 	dist = dist / this.EarthRadius;
 	// convert dist to angular distance in radians
 	brng = brng.toRad();
-	//
-	var lat1 = initLatLon.lat().toRad(), lon1 = initLatLon.lng().toRad();
 
+	var lat1 = initLatLon.lat().toRad(), lon1 = initLatLon.lng().toRad();
 	var lat2 = Math.asin(Math.sin(lat1) * Math.cos(dist) + Math.cos(lat1) * Math.sin(dist) * Math.cos(brng));
 	var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(dist) * Math.cos(lat1), Math.cos(dist) - Math.sin(lat1) * Math.sin(lat2));
 	lon2 = (lon2 + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
