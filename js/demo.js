@@ -14,13 +14,13 @@
 			};
 
 			function createGoogleRadar() {
-				var opt = {
+				var opts = {
 					lat : oPicto.latitude,
 					lng : oPicto.longitude
 				}
 				if( typeof (myGoogleRadar) == 'undefined') {
 					if( typeof (map) != 'undefined') {
-						myGoogleRadar = new GoogleRadar(map, opt);
+						myGoogleRadar = new GoogleRadar(map, opts);
 					}
 				}
 			};
@@ -33,7 +33,6 @@
 				};
 
 				if( typeof (myGoogleRadar) != 'undefined')
-					//myGoogleRadar.drawCircles(opts);
 					myGoogleRadar.drawAxis(opts);
 
 			};
