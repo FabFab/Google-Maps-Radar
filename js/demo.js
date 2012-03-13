@@ -3,8 +3,7 @@
 				longitude : 139.700512
 			};
 
-			NotifierjsConfig.position = ["bottom", "right"];
-			
+			NotifierjsConfig.position = ["top", "right"];
 			function initGoogleMaps() {
 				var mapOptions = {
 					zoom : 15,
@@ -31,7 +30,7 @@
 				var opts = {
 					circleColor : "#00FF00",
 					radius : "100",
-					n : 11
+					n : 10
 				};
 
 				if( typeof (myGoogleRadar) != 'undefined')
@@ -50,7 +49,7 @@
 				oPictoInit = {
 					lat : oPicto.latitude,
 					lng : oPicto.longitude,
-					iconUrl : "./img/multi-agents.png",
+					iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/multi-agents.png",
 					id : "meeting",
 					name : "The Meeting Point",
 					content : "Hachiko, the most famous meeting point in Tokyo"
@@ -123,7 +122,7 @@
 			var oPicto0 = {
 				lat : 35.662872,
 				lng : 139.700448,
-				iconUrl : "./img/jack_32.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/jack_32.png",
 				id : "trump",
 				handle : function() {
 					Notifier.success("One of the Best Club in Tokyo", "The Trump Room");
@@ -140,7 +139,7 @@
 			var oPicto1 = {
 				lat : 35.65920,
 				lng : 139.70080,
-				iconUrl : "./img/male-user.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/male-user.png",
 				id : "male-user",
 				handle : function() {
 					Notifier.info("Several Floors of Shopping for him", "Shopping for him");
@@ -156,7 +155,7 @@
 			var oPicto2 = {
 				lat : 35.66147,
 				lng : 139.70045,
-				iconUrl : "./img/female-user.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/female-user.png",
 				id : "female-user",
 				visible : false,
 				handle : function() {
@@ -172,7 +171,7 @@
 			var oPicto3 = {
 				lat : 35.66111,
 				lng : 139.69786,
-				iconUrl : "./img/star.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/star.png",
 				id : "bar",
 				handle : function() {
 					Notifier.success("Nice DJs, Good drinks, but a bit expensive", "Nice Bar, Rock 'n roll!");
@@ -187,7 +186,7 @@
 			var oPicto4 = {
 				lat : 35.660733,
 				lng : 139.698608,
-				iconUrl : "./img/recycle-full.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/recycle-full.png",
 				id : "stupid",
 				handle : function() {
 					Notifier.warning("Hey bro, wanna come to my bar and meet my girlz?", "Bar for stupid");
@@ -202,7 +201,7 @@
 			var oPicto5 = {
 				lat : 35.65941,
 				lng : 139.70800,
-				iconUrl : "./img/lock.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/lock.png",
 				id : "unknown1",
 				visible : false,
 				handle : function() {
@@ -221,7 +220,7 @@
 			var oPicto6 = {
 				lat : 35.6485, 
 				lng : 139.7045,
-				iconUrl : "./img/line-globe.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/line-globe.png",
 				id : "unknown2",
 				handle : function() {
 					Notifier.info("Too far away to be triggered");
@@ -236,7 +235,7 @@
 			var oPicto7 = {
 				lat : 35.6567, 
 				lng : 139.6954,
-				iconUrl : "./img/heart.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/heart.png",
 				id : "love",
 				visible : false,
 				handle : function() {
@@ -255,7 +254,7 @@
 			var oPicto8 = {
 				lat : 35.6564, 
 				lng : 139.7009,
-				iconUrl : "./img/lookup.png",
+				iconUrl : "http://www.blackspotradish.com/public/GoogleMapsRadar/img/lookup.png",
 				id : "unknow3",
 				visible : false,
 				handle : function() {

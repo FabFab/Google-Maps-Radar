@@ -57,7 +57,7 @@ GoogleRadar.prototype.drawAxis = function(opts) {
 	if(this.aCircles.length > 1)
 		return false;
 
-	for(n=0; n<this.axis.n; n++) {
+	for(n=0; n<=this.axis.n; n++) {
 		var options = {
 			center : this.center,
 			clickable : false,
@@ -77,9 +77,9 @@ GoogleRadar.prototype.drawAxis = function(opts) {
 }
 
 GoogleRadar.prototype.undrawAxis = function() {
-	for(var n in this.aCircles) {
+	for(n=0; n<=this.axis.n; n++) {
 		this.aCircles[n].setMap(null);
-		this.aCircles[n] = null;
+		this.aCircles[n] = null;		
 	}
 	this.aCircles = new Array();
 	this.axis = undefined;
