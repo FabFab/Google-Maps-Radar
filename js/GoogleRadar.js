@@ -97,13 +97,19 @@ GoogleRadar.prototype.addRadarLine = function(opts) {
 		this.radarLine.radius = (opts && opts.radius) || 0.5; //km
 		this.radarLine.time = (opts && opts.time) || 100;
 		this.radarLine.angle = (opts && opts.angle) || 0;
-		this.radarLine.angleOrigin = (opts && opts.angle) || 0;
+		this.radarLine.angleOrigin = (opts && opts.angleOrigin) || 0;
 		this.radarLine.angleIncrease = (opts && opts.angleIncrease) || 5;
 		this.radarLine.angleMaxOverture = (opts && opts.angleMaxOverture) || 10;
 		this.radarLine.lapCurrent = 0;
-		this.radarLine.lapMax = (opts && opts.laps)|| 0;
-
-		var aLine = [new google.maps.LatLng(this.lat, this.lng), new google.maps.LatLng(this.lat + this.radarLine.radius, this.lng)];
+		this.radarLine.lapMax = (opts && opts.lapMax)|| 0;
+		
+		if(opts && (typeof(opts.autostart) == 'boolean'))
+			this.radarLine.autostart = opts.autostart;
+		else 
+			this.radarLine.autostart = true;
+		
+		var remote = this.destinationPoint(this.center, this.radarLine.radius, this.radarLine.angle);
+		var aLine = [new google.maps.LatLng(this.lat, this.lng), remote];
 
 		this.radarLine.shape = new google.maps.Polyline({
 			clickable: false,
@@ -121,7 +127,8 @@ GoogleRadar.prototype.addRadarLine = function(opts) {
 			return false;
 	}
 
-	this.rotateLine();
+	if(this.radarLine.autostart)
+		this.rotateLine();
 }
 
 GoogleRadar.prototype.rotateLine = function() {
@@ -140,7 +147,11 @@ GoogleRadar.prototype.rotateLine = function() {
 			var markerDistance = this.distanceFrom(this.center, this.aMarkers[i].getPosition());
 			if(this.radarLine.angle == this.radarLine.angleOrigin)
 				this.aMarkers[i].hasbeenShown = false;
-			if(!this.aMarkers[i].hasbeenShown && (markerAngle < (this.radarLine.angle + this.radarLine.angleMaxOverture / 2)) && (markerAngle > (this.radarLine.angle - this.radarLine.angleMaxOverture / 2)) && (markerDistance < this.radarLine.radius)) {
+			
+			if(!this.aMarkers[i].hasbeenShown && 
+				(markerAngle < (this.radarLine.angle + this.radarLine.angleMaxOverture / 2)) && 
+				(markerAngle > (this.radarLine.angle - this.radarLine.angleMaxOverture / 2)) && 
+				(markerDistance < this.radarLine.radius)) {
 
 				if(this.aMarkers[i].handle)
 					this.aMarkers[i].handle();
@@ -163,6 +174,13 @@ GoogleRadar.prototype.stopLine = function() {
 	this.radarLine.callback = null;
 }
 
+GoogleRadar.prototype.forceStartLine = function() {
+	this.radarLine.autostart = true;
+	
+	if(this.radarLine.autostart)
+		this.rotateLine();
+}
+
 GoogleRadar.prototype.hideLine = function() {
 	this.radarLine.shape.setVisible(false);
 }
@@ -181,12 +199,17 @@ GoogleRadar.prototype.addRadarPolygon = function(opts) {
 		this.radarPolygon.radius = (opts && opts.radius) || 1;//km
 		this.radarPolygon.time = (opts && opts.time) || 100;
 		this.radarPolygon.angle = (opts && opts.angle) || 0;
-		this.radarPolygon.angleOrigin = (opts && opts.angle) || 0;
+		this.radarPolygon.angleOrigin = (opts && opts.angleOrigin) || 0;
 		this.radarPolygon.angleIncrease = (opts && opts.angleIncrease) || 5;
 		this.radarPolygon.angleMaxOverture = 10;
 		this.radarPolygon.shapeCoords = (opts && opts.shapeCoords) || [this.center, this.destinationPoint(this.center, this.radarPolygon.radius, this.radarPolygon.angleMaxOverture / 2), this.destinationPoint(this.center, this.radarPolygon.radius, -this.radarPolygon.angleMaxOverture / 2), this.center];
 		this.radarPolygon.lapCurrent = 0;
-		this.radarPolygon.lapMax = (opts && opts.laps)|| 0;
+		this.radarPolygon.lapMax = (opts && opts.lapMax)|| 0;
+		
+		if(opts && (typeof(opts.autostart) == 'boolean'))
+			this.radarPolygon.autostart = opts.autostart;
+		else 
+			this.radarPolygon.autostart = true;
 
 		this.radarPolygon.shape = new google.maps.Polygon({
 			clickable: false,
@@ -206,10 +229,11 @@ GoogleRadar.prototype.addRadarPolygon = function(opts) {
 		return false;
 	}
 
-	this.rotatePolygon();
+	if(this.radarPolygon.autostart)
+		this.rotatePolygon();
 }
 
-GoogleRadar.prototype.rotatePolygon = function() {
+GoogleRadar.prototype.rotatePolygon = function(stop) {
 	if(!this.radarPolygon.angle && !this.radarPolygon.time && !this.radarPolygon.angleIncrease)
 		return false;
 	// Transform the shape with google.latlng into {distance, bearing} array
@@ -224,10 +248,10 @@ GoogleRadar.prototype.rotatePolygon = function() {
 
 	}
 
-	this.rotateInArray();
+	this.rotateInArray(stop);
 }
 
-GoogleRadar.prototype.rotateInArray = function() {
+GoogleRadar.prototype.rotateInArray = function(stop) {
 	var aNewShapePolygon = [];
 
 	for(var i = 0; i < this.radarPolygon.shapeCylindric.length; i++) {
@@ -241,12 +265,20 @@ GoogleRadar.prototype.rotateInArray = function() {
 	this.detectMarkers(this.radarPolygon);
 
 	// Count the laps.
-	this.lapsAndLoops(this.radarPolygon, "rotateInArray");
+	if((typeof(stop) == "boolean" && stop==false) || (stop==null))
+		this.lapsAndLoops(this.radarPolygon, "rotateInArray");
 }
 
 GoogleRadar.prototype.stopPolygon = function() {
 	window.clearTimeout(this.radarPolygon.callback);
 	this.radarPolygon.callback = null;
+}
+
+GoogleRadar.prototype.forceStartPolygon = function() {
+	this.radarPolygon.autostart = true;
+	
+	if(this.radarPolygon.autostart)
+		this.rotatePolygon();
 }
 
 GoogleRadar.prototype.hidePolygon = function() {
@@ -255,6 +287,11 @@ GoogleRadar.prototype.hidePolygon = function() {
 
 GoogleRadar.prototype.showPolygon = function() {
 	this.radarPolygon.shape.setVisible(true);
+}
+
+GoogleRadar.prototype.justRotatePolygon = function(angle) {
+	this.radarPolygon.angle+= angle;
+	this.rotatePolygon(true);
 }
 
 /**
